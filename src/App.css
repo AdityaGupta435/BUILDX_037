@@ -236,3 +236,283 @@ body {
     right: 10px;
   }
 }
+
+
+
+/* =========================
+   STUDENT PROFILE
+========================= */
+
+.profile-section {
+  max-width: 1050px;
+  margin: 40px auto 100px;
+  padding: 60px 7%;
+}
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section-heading > span,
+.results-header > div > span {
+  color: #4f46e5;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.section-heading h2,
+.results-header h2 {
+  font-size: 36px;
+  margin: 10px 0;
+}
+
+.section-heading p,
+.results-header p {
+  color: #737d8f;
+  line-height: 1.6;
+}
+
+.profile-form {
+  background: white;
+  padding: 35px;
+  border-radius: 22px;
+  box-shadow: 0 15px 50px rgba(30, 41, 59, 0.08);
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #30394b;
+}
+
+.form-group input,
+.form-group select {
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid #dce1eb;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
+}
+
+.match-btn {
+  grid-column: 1 / -1;
+  height: 50px;
+  border: none;
+  border-radius: 11px;
+  background: #4f46e5;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* =========================
+   SCHOLARSHIP RESULTS
+========================= */
+
+.results-section {
+  max-width: 1150px;
+  margin: 0 auto 100px;
+  padding: 0 6%;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+}
+
+.profile-summary {
+  background: white;
+  border: 1px solid #edf0f5;
+  padding: 18px 22px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-summary strong {
+  font-size: 18px;
+}
+
+.profile-summary span {
+  color: #8a93a4;
+  font-size: 11px;
+  margin-right: 10px;
+}
+
+/* CARDS */
+
+.scholarship-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.scholarship-card {
+  background: white;
+  border: 1px solid #edf0f5;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: 0.25s ease;
+}
+
+.scholarship-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 45px rgba(30, 41, 59, 0.11);
+}
+
+.scholarship-card img {
+  width: 100%;
+  height: 175px;
+  object-fit: cover;
+}
+
+.scholarship-content {
+  padding: 20px;
+}
+
+.match-badge {
+  display: inline-block;
+  background: #eaf8f0;
+  color: #16834c;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 6px 9px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.scholarship-content h3 {
+  font-size: 18px;
+  line-height: 1.35;
+  margin-bottom: 7px;
+}
+
+.provider {
+  color: #7b8495;
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+
+.scholarship-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-top: 1px solid #edf0f5;
+  border-bottom: 1px solid #edf0f5;
+  padding: 14px 0;
+  margin-bottom: 16px;
+}
+
+.scholarship-info div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.scholarship-info span {
+  color: #8a93a4;
+  font-size: 11px;
+}
+
+.scholarship-info strong {
+  font-size: 12px;
+  text-align: right;
+}
+
+.apply-btn {
+  width: 100%;
+  height: 42px;
+  border: 1px solid #dfe3ec;
+  background: white;
+  color: #4f46e5;
+  border-radius: 9px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* EMPTY */
+
+.empty-state {
+  text-align: center;
+  padding: 60px;
+  background: white;
+  border-radius: 18px;
+}
+
+.empty-state div {
+  font-size: 40px;
+}
+
+.empty-state h3 {
+  margin: 12px 0 5px;
+}
+
+.empty-state p {
+  color: #7b8495;
+}
+
+/* MOBILE */
+
+@media (max-width: 900px) {
+
+  .scholarship-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .results-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 650px) {
+
+  .profile-form {
+    grid-template-columns: 1fr;
+    padding: 22px;
+  }
+
+  .match-btn {
+    grid-column: auto;
+  }
+
+  .scholarship-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-summary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .section-heading h2,
+  .results-header h2 {
+    font-size: 28px;
+  }
+}
