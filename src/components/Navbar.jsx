@@ -1,21 +1,55 @@
+import { Link } from "react-router-dom";
+
 function Navbar() {
   return (
     <nav className="navbar">
-      <div className="logo">
-        <span className="logo-icon">🎓</span>
-        <span>Scholar<span>Match</span></span>
-      </div>
+
+      <Link
+        to="/"
+        className="logo"
+      >
+        <span className="logo-icon">
+          🎓
+        </span>
+
+        <span>
+          Scholar<span>Match</span>
+        </span>
+      </Link>
+
 
       <div className="nav-links">
-        <a href="#home">Home</a>
-        <a href="#scholarships">Scholarships</a>
-        <a href="#career">Career</a>
-        <a href="#assistant">AI Assistant</a>
+
+        <Link to="/">
+          Home
+        </Link>
+
+        <Link to="/dashboard">
+          Dashboard
+        </Link>
+
+        <Link to="/scholarships">
+          Scholarships
+        </Link>
+
+        <Link to="/career">
+          Career
+        </Link>
+
+        <Link to="/assistant">
+          AI Assistant
+        </Link>
+
       </div>
 
-      <button className="profile-btn">
+
+      <Link
+        to="/profile"
+        className="profile-btn"
+      >
         My Profile
-      </button>
+      </Link>
+
     </nav>
   );
 }

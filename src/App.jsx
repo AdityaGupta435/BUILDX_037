@@ -1,56 +1,33 @@
 import { useState } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
+
 import "./App.css";
 
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
+import StudentDashboard from "./components/StudentDashboard";
 import StudentProfile from "./components/StudentProfile";
 import ScholarshipResults from "./components/ScholarshipResults";
 import CareerSection from "./components/CareerSection";
-import opportunities from "./data/opportunities";
 import AICareerAssistant from "./components/AICareerAssistant";
 
 import scholarships from "./data/scholarships";
+import opportunities from "./data/opportunities";
 
 
-function App() {
-  const [student, setStudent] = useState(null);
-  const [matchedScholarships, setMatchedScholarships] = useState([]);
+/* =========================
+   HOME PAGE
+========================= */
 
-  const findScholarships = (profile) => {
-    const matches = scholarships.filter((scholarship) => {
-      const marksMatch =
-        profile.marks >= scholarship.minMarks;
-
-      const incomeMatch =
-        profile.income <= scholarship.maxIncome;
-
-      const classMatch =
-        scholarship.eligibleClasses.includes(profile.classLevel);
-
-      const categoryMatch =
-        scholarship.category === "General" ||
-        scholarship.category === profile.category;
-
-      return (
-        marksMatch &&
-        incomeMatch &&
-        classMatch &&
-        categoryMatch
-      );
-    });
-
-    setStudent(profile);
-    setMatchedScholarships(matches);
-
-    setTimeout(() => {
-      document
-        .getElementById("scholarships")
-        ?.scrollIntoView({
-          behavior: "smooth",
-        });
-    }, 100);
-  };
-
+function Home({
+  student,
+  matchedScholarships,
+  findScholarships,
+}) {
   return (
     <div className="app">
 
@@ -58,16 +35,211 @@ function App() {
 
       <Hero />
 
-      <StudentProfile onMatch={findScholarships} />
+      <StudentProfile
+        onMatch={findScholarships}
+      />
 
       <ScholarshipResults
         scholarships={matchedScholarships}
         student={student}
       />
-      <CareerSection opportunities={opportunities} />
+
+      <CareerSection
+        opportunities={opportunities}
+      />
+
       <AICareerAssistant />
 
     </div>
+  );
+}
+
+
+/* =========================
+   APP
+========================= */
+
+function App() {
+
+  const [student, setStudent] = useState(null);
+
+  const [matchedScholarships, setMatchedScholarships] =
+    useState([]);
+
+
+  /* =========================
+     SCHOLARSHIP MATCHING
+  ========================= */
+
+  const findScholarships = (profile) => {
+
+    const matches = scholarships.filter(
+      (scholarship) => {
+
+        const marksMatch =
+          profile.marks >= scholarship.minMarks;
+
+        const incomeMatch =
+          profile.income <= scholarship.maxIncome;
+
+        const classMatch =
+          scholarship.eligibleClasses.includes(
+            profile.classLevel
+          );
+
+        const categoryMatch =
+          scholarship.category === "General" ||
+          scholarship.category === profile.category;
+
+        return (
+          marksMatch &&
+          incomeMatch &&
+          classMatch &&
+          categoryMatch
+        );
+      }
+    );
+
+    setStudent(profile);
+
+    setMatchedScholarships(matches);
+
+    setTimeout(() => {
+
+      document
+        .getElementById("scholarships")
+        ?.scrollIntoView({
+          behavior: "smooth",
+        });
+
+    }, 100);
+  };
+
+
+  return (
+
+    <BrowserRouter>
+
+      <Routes>
+
+        {/* =========================
+            HOME
+        ========================= */}
+
+        <Route
+          path="/"
+          element={
+            <Home
+              student={student}
+              matchedScholarships={
+                matchedScholarships
+              }
+              findScholarships={
+                findScholarships
+              }
+            />
+          }
+        />
+
+
+        {/* =========================
+            FULL DASHBOARD
+        ========================= */}
+
+       <Route
+  path="/dashboard"
+  element={
+    <StudentDashboard
+      student={student}
+      scholarshipCount={matchedScholarships.length}
+      opportunityCount={opportunities.length}
+    />
+  }
+/>
+
+
+        {/* =========================
+            SCHOLARSHIPS
+        ========================= */}
+
+        <Route
+          path="/scholarships"
+          element={
+            <>
+              <Navbar />
+
+             <ScholarshipResults
+  scholarships={
+    matchedScholarships.length > 0
+      ? matchedScholarships
+      : scholarships
+  }
+  student={student}
+/>
+            </>
+          }
+        />
+
+
+        {/* =========================
+            CAREER
+        ========================= */}
+
+        <Route
+          path="/career"
+          element={
+            <>
+              <Navbar />
+
+              <CareerSection
+                opportunities={
+                  opportunities
+                }
+              />
+            </>
+          }
+        />
+
+
+        {/* =========================
+            AI ASSISTANT
+        ========================= */}
+
+        <Route
+          path="/assistant"
+          element={
+            <>
+              <Navbar />
+
+              <AICareerAssistant />
+            </>
+          }
+        />
+
+
+        {/* =========================
+            PROFILE
+        ========================= */}
+
+        <Route
+          path="/profile"
+          element={
+            <>
+              <Navbar />
+
+              <StudentProfile
+                onMatch={
+                  findScholarships
+                }
+              />
+            </>
+          }
+        />
+
+      </Routes>
+
+    </BrowserRouter>
+
   );
 }
 
