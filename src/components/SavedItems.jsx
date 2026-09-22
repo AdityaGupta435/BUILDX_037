@@ -6,12 +6,20 @@ import {
   removeSavedItem,
 } from "../utils/savedItems";
 
+import {
+  getApplications,
+  getApplicationStatus,
+  updateApplicationStatus,
+} from "../utils/applicationTracker";
+
 function SavedItems() {
   const [savedItems, setSavedItems] =
     useState([]);
 
   const [filter, setFilter] =
     useState("All");
+
+  const [applications, setApplications] = useState([]);
 
 
   /* =========================
@@ -20,6 +28,7 @@ function SavedItems() {
 
   useEffect(() => {
     setSavedItems(getSavedItems());
+    setApplications(getApplications());
   }, []);
 
 
@@ -35,6 +44,25 @@ function SavedItems() {
 
     setSavedItems(updated);
   };
+
+  const handleStatusChange = (item, status) => {
+  const updatedApplications = updateApplicationStatus(
+    item,
+    status
+  );
+
+  setApplications(updatedApplications);
+};
+
+const getStatus = (item) => {
+  const application = applications.find(
+    (application) =>
+      application.id === item.id &&
+      application.type === item.type
+  );
+
+  return application?.status || "Saved";
+};
 
 
   const filteredItems =
@@ -257,6 +285,34 @@ function SavedItems() {
                   </>
 
                 )}
+
+  <div className="application-tracker">
+  <div className="application-status-row">
+    <span>Application Status</span>
+
+    <span
+      className={`application-status ${getStatus(item)
+        .toLowerCase()
+        .replace(" ", "-")}`}
+    >
+      {getStatus(item)}
+    </span>
+  </div>
+
+  <select
+    value={getStatus(item)}
+    onChange={(e) =>
+      handleStatusChange(item, e.target.value)
+    }
+    className="application-status-select"
+  >
+    <option value="Saved">Saved</option>
+    <option value="Applied">Applied</option>
+    <option value="In Review">In Review</option>
+    <option value="Accepted">Accepted</option>
+    <option value="Rejected">Rejected</option>
+  </select>
+</div>
 
 
                 <button

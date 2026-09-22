@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -15,6 +15,10 @@ import ScholarshipResults from "./components/ScholarshipResults";
 import CareerSection from "./components/CareerSection";
 import AICareerAssistant from "./components/AICareerAssistant";
 import SavedItems from "./components/SavedItems";
+import AccessibilityPanel from "./components/AccessibilityPanel";
+import OfflineIndicator from "./components/OfflineIndicator";
+import { AccessibilityProvider } from "./context/AccessibilityContext";
+import { cacheScholarMatchData } from "./utils/offlineStorage";
 
 import scholarships from "./data/scholarships";
 import opportunities from "./data/opportunities";
@@ -64,6 +68,10 @@ function Home({
 ========================= */
 
 function App() {
+
+  useEffect(() => {
+    cacheScholarMatchData(scholarships, opportunities);
+  }, []);
 
   const [student, setStudent] = useState(null);
 
@@ -121,7 +129,10 @@ function App() {
 
 
   return (
-    <BrowserRouter>
+    <AccessibilityProvider>
+      <BrowserRouter>
+        <OfflineIndicator />
+        <AccessibilityPanel />
 
       <Routes>
 
@@ -255,7 +266,8 @@ function App() {
 
       </Routes>
 
-    </BrowserRouter>
+      </BrowserRouter>
+    </AccessibilityProvider>
   );
 }
 

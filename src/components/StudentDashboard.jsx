@@ -1,5 +1,9 @@
 import { Link } from "react-router-dom";
 import "./StudentDashboard.css";
+import { useEffect, useState } from "react";
+import { getApplications } from "../utils/applicationTracker";
+import scholarships from "../data/scholarships";
+import opportunities from "../data/opportunities";
 
 function StudentDashboard({
   student,
@@ -7,6 +11,64 @@ function StudentDashboard({
   opportunityCount,
 }) {
   const name = student?.name || "Student";
+
+  const [applications, setApplications] = useState([]);
+
+  // Load application tracking data
+  useEffect(() => {
+    setApplications(getApplications());
+  }, []);
+
+  // Application statistics
+  const applicationCount = applications.length;
+
+  const inReviewCount = applications.filter(
+    (item) => item.status === "In Review"
+  ).length;
+
+  const acceptedCount = applications.filter(
+    (item) => item.status === "Accepted"
+  ).length;
+
+  const rejectedCount = applications.filter(
+    (item) => item.status === "Rejected"
+  ).length;
+
+  const interestSkillMap = {
+    web: ["React", "JavaScript", "HTML", "CSS"],
+    java: ["Java", "Spring", "Spring Boot"],
+    data: ["Python", "Data", "Machine Learning", "Analytics"],
+    design: ["Figma", "UI/UX", "Design"],
+  };
+
+  const recommendedScholarships = student
+    ? scholarships
+        .filter((scholarship) => {
+          const marksMatch = student.marks >= scholarship.minMarks;
+          const incomeMatch = student.income <= scholarship.maxIncome;
+          const classMatch = scholarship.eligibleClasses.includes(
+            student.classLevel
+          );
+          const categoryMatch =
+            scholarship.category === "General" ||
+            scholarship.category === student.category;
+
+          return marksMatch && incomeMatch && classMatch && categoryMatch;
+        })
+        .slice(0, 3)
+    : [];
+
+  const recommendedOpportunities = student?.careerInterest
+    ? opportunities
+        .filter((opportunity) => {
+          const keywords = interestSkillMap[student.careerInterest] || [];
+          const text = `${opportunity.title} ${opportunity.organization} ${opportunity.skill}`.toLowerCase();
+          return keywords.some((keyword) =>
+            text.includes(keyword.toLowerCase())
+          );
+        })
+        .slice(0, 3)
+    : [];
 
   return (
     <div className="dashboard-page">
@@ -64,12 +126,12 @@ function StudentDashboard({
           </Link>
 
           <Link
-  to="/saved"
-  className="sidebar-link"
->
-  <span>🔖</span>
-  Saved Items
-</Link>
+            to="/saved"
+            className="sidebar-link"
+          >
+            <span>🔖</span>
+            Saved Items
+          </Link>
 
           <Link
             to="/profile"
@@ -112,7 +174,6 @@ function StudentDashboard({
           </Link>
 
         </div>
-
       </aside>
 
 
@@ -248,6 +309,237 @@ function StudentDashboard({
             </div>
 
           </div>
+
+        </section>
+
+
+        {/* =========================
+            APPLICATION TRACKING
+        ========================= */}
+
+        <section className="application-overview">
+
+          <div className="application-overview-header">
+
+            <div>
+
+              <span className="dashboard-section-label">
+                APPLICATION TRACKING
+              </span>
+
+              <h2>
+                Your Applications
+              </h2>
+
+              <p>
+                Track the scholarships and
+                opportunities you are following.
+              </p>
+
+            </div>
+
+            <Link
+              to="/saved"
+              className="application-view-all"
+            >
+              View Saved Items →
+            </Link>
+
+          </div>
+
+
+          <div className="application-stats">
+
+            <div className="application-stat-card">
+
+              <span className="application-stat-icon">
+                📌
+              </span>
+
+              <div>
+
+                <strong>
+                  {applicationCount}
+                </strong>
+
+                <span>
+                  Total Applications
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <div className="application-stat-card">
+
+              <span className="application-stat-icon">
+                🕐
+              </span>
+
+              <div>
+
+                <strong>
+                  {inReviewCount}
+                </strong>
+
+                <span>
+                  In Review
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <div className="application-stat-card">
+
+              <span className="application-stat-icon">
+                ✅
+              </span>
+
+              <div>
+
+                <strong>
+                  {acceptedCount}
+                </strong>
+
+                <span>
+                  Accepted
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <div className="application-stat-card">
+
+              <span className="application-stat-icon">
+                ❌
+              </span>
+
+              <div>
+
+                <strong>
+                  {rejectedCount}
+                </strong>
+
+                <span>
+                  Rejected
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        {/* =========================
+            RECOMMENDED FOR YOU
+        ========================= */}
+
+        <section className="dashboard-panel recommendations-panel">
+
+          <div className="panel-heading recommendations-heading">
+            <div>
+              <span>PERSONALIZED FOR YOU</span>
+              <h2>Recommended For You</h2>
+            </div>
+
+            {student && (
+              <span className="recommendation-profile-note">
+                Based on your profile
+              </span>
+            )}
+          </div>
+
+          {!student ? (
+            <div className="recommendation-empty">
+              <div className="recommendation-empty-icon">🎯</div>
+              <div>
+                <strong>Complete your profile to unlock recommendations</strong>
+                <p>
+                  Add your marks, category and career interest to see
+                  personalized scholarships and opportunities.
+                </p>
+              </div>
+              <Link to="/profile" className="recommendation-action">
+                Complete Profile →
+              </Link>
+            </div>
+          ) : (
+            <div className="recommendation-grid">
+
+              <div className="recommendation-column">
+                <div className="recommendation-column-header">
+                  <span className="recommendation-icon purple">🎓</span>
+                  <div>
+                    <strong>Scholarships</strong>
+                    <small>Matched to your eligibility</small>
+                  </div>
+                </div>
+
+                {recommendedScholarships.length > 0 ? (
+                  <div className="recommendation-list">
+                    {recommendedScholarships.map((scholarship) => (
+                      <Link
+                        to="/scholarships"
+                        className="recommendation-item"
+                        key={scholarship.id}
+                      >
+                        <div>
+                          <strong>{scholarship.name}</strong>
+                          <span>{scholarship.amount}</span>
+                        </div>
+                        <b>→</b>
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="recommendation-no-result">
+                    No scholarship matches found yet.
+                  </p>
+                )}
+              </div>
+
+              <div className="recommendation-column">
+                <div className="recommendation-column-header">
+                  <span className="recommendation-icon orange">💼</span>
+                  <div>
+                    <strong>Career Opportunities</strong>
+                    <small>Based on your career interest</small>
+                  </div>
+                </div>
+
+                {recommendedOpportunities.length > 0 ? (
+                  <div className="recommendation-list">
+                    {recommendedOpportunities.map((opportunity) => (
+                      <Link
+                        to="/career"
+                        className="recommendation-item"
+                        key={opportunity.id}
+                      >
+                        <div>
+                          <strong>{opportunity.title}</strong>
+                          <span>{opportunity.location} · {opportunity.skill}</span>
+                        </div>
+                        <b>→</b>
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="recommendation-no-result">
+                    Select a career interest to get recommendations.
+                  </p>
+                )}
+              </div>
+
+            </div>
+          )}
 
         </section>
 
@@ -595,29 +887,31 @@ function StudentDashboard({
 
             </Link>
 
+
             <Link to="/saved">
 
-  <div className="quick-icon purple">
-    🔖
-  </div>
+              <div className="quick-icon purple">
+                🔖
+              </div>
 
-  <div>
+              <div>
 
-    <strong>
-      Saved Items
-    </strong>
+                <strong>
+                  Saved Items
+                </strong>
 
-    <span>
-      View saved scholarships & opportunities
-    </span>
+                <span>
+                  View saved scholarships & opportunities
+                </span>
 
-  </div>
+              </div>
 
-  <b>
-    →
-  </b>
+              <b>
+                →
+              </b>
 
-</Link>
+            </Link>
+
 
           </div>
 

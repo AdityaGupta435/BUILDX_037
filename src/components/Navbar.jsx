@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useAccessibility } from "../context/AccessibilityContext";
 
 function Navbar() {
+  const { t } = useAccessibility();
+
   return (
     <nav className="navbar">
 
@@ -21,23 +24,23 @@ function Navbar() {
       <div className="nav-links">
 
         <Link to="/">
-          Home
+          {t("home")}
         </Link>
 
         <Link to="/dashboard">
-          Dashboard
+          {t("dashboard")}
         </Link>
 
         <Link to="/scholarships">
-          Scholarships
+          {t("scholarships")}
         </Link>
 
         <Link to="/career">
-          Career
+          {t("career")}
         </Link>
 
         <Link to="/assistant">
-          AI Assistant
+          {t("assistant")}
         </Link>
 
       </div>
@@ -47,7 +50,7 @@ function Navbar() {
         to="/profile"
         className="profile-btn"
       >
-        My Profile
+        {t("profile")}
       </Link>
 
     </nav>

@@ -3203,3 +3203,73 @@ body {
   }
 
 }
+
+
+.application-tracker {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.application-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.application-status-row > span:first-child {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.application-status {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.application-status.saved {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.application-status.applied {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.application-status.in-review {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.application-status.accepted {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.application-status.rejected {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.application-status-select {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #374151;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.application-status-select:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
