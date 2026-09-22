@@ -5,6 +5,8 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import StudentProfile from "./components/StudentProfile";
 import ScholarshipResults from "./components/ScholarshipResults";
+import CareerSection from "./components/CareerSection";
+import opportunities from "./data/opportunities";
 
 import scholarships from "./data/scholarships";
 
@@ -60,6 +62,7 @@ function App() {
         scholarships={matchedScholarships}
         student={student}
       />
+      <CareerSection opportunities={opportunities} />
 
     </div>
   );
