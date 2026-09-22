@@ -7,8 +7,10 @@ import StudentProfile from "./components/StudentProfile";
 import ScholarshipResults from "./components/ScholarshipResults";
 import CareerSection from "./components/CareerSection";
 import opportunities from "./data/opportunities";
+import AICareerAssistant from "./components/AICareerAssistant";
 
 import scholarships from "./data/scholarships";
+
 
 function App() {
   const [student, setStudent] = useState(null);
@@ -63,6 +65,7 @@ function App() {
         student={student}
       />
       <CareerSection opportunities={opportunities} />
+      <AICareerAssistant />
 
     </div>
   );
