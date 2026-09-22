@@ -14,6 +14,7 @@ import StudentProfile from "./components/StudentProfile";
 import ScholarshipResults from "./components/ScholarshipResults";
 import CareerSection from "./components/CareerSection";
 import AICareerAssistant from "./components/AICareerAssistant";
+import SavedItems from "./components/SavedItems";
 
 import scholarships from "./data/scholarships";
 import opportunities from "./data/opportunities";
@@ -46,9 +47,12 @@ function Home({
 
       <CareerSection
         opportunities={opportunities}
+        student={student}
       />
 
-      <AICareerAssistant />
+      <AICareerAssistant
+  student={student}
+/>
 
     </div>
   );
@@ -117,7 +121,6 @@ function App() {
 
 
   return (
-
     <BrowserRouter>
 
       <Routes>
@@ -146,16 +149,20 @@ function App() {
             FULL DASHBOARD
         ========================= */}
 
-       <Route
-  path="/dashboard"
-  element={
-    <StudentDashboard
-      student={student}
-      scholarshipCount={matchedScholarships.length}
-      opportunityCount={opportunities.length}
-    />
-  }
-/>
+        <Route
+          path="/dashboard"
+          element={
+            <StudentDashboard
+              student={student}
+              scholarshipCount={
+                matchedScholarships.length
+              }
+              opportunityCount={
+                opportunities.length
+              }
+            />
+          }
+        />
 
 
         {/* =========================
@@ -168,14 +175,14 @@ function App() {
             <>
               <Navbar />
 
-             <ScholarshipResults
-  scholarships={
-    matchedScholarships.length > 0
-      ? matchedScholarships
-      : scholarships
-  }
-  student={student}
-/>
+              <ScholarshipResults
+                scholarships={
+                  matchedScholarships.length > 0
+                    ? matchedScholarships
+                    : scholarships
+                }
+                student={student}
+              />
             </>
           }
         />
@@ -192,9 +199,8 @@ function App() {
               <Navbar />
 
               <CareerSection
-                opportunities={
-                  opportunities
-                }
+                opportunities={opportunities}
+                student={student}
               />
             </>
           }
@@ -211,10 +217,23 @@ function App() {
             <>
               <Navbar />
 
-              <AICareerAssistant />
+              <AICareerAssistant 
+                student={student}
+              />
             </>
           }
         />
+
+        <Route
+  path="/saved"
+  element={
+    <>
+      <Navbar />
+
+      <SavedItems />
+    </>
+  }
+/>
 
 
         {/* =========================
@@ -228,9 +247,7 @@ function App() {
               <Navbar />
 
               <StudentProfile
-                onMatch={
-                  findScholarships
-                }
+                onMatch={findScholarships}
               />
             </>
           }
@@ -239,7 +256,6 @@ function App() {
       </Routes>
 
     </BrowserRouter>
-
   );
 }
 

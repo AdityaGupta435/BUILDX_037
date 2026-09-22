@@ -1,9 +1,28 @@
 import { useState } from "react";
+import {
+  isItemSaved,
+  toggleSavedItem,
+} from "../utils/savedItems";
 
-function ScholarshipCard({ scholarship, student }) {
-  const [showDetails, setShowDetails] = useState(false);
+function ScholarshipCard({
+  scholarship,
+  student,
+}) {
+  const [showDetails, setShowDetails] =
+    useState(false);
 
-  const hasStudentProfile = Boolean(student);
+  const [
+    saved,
+    setSaved,
+  ] = useState(
+    isItemSaved(
+      scholarship.id,
+      "scholarship"
+    )
+  );
+
+  const hasStudentProfile =
+    Boolean(student);
 
   const marksEligible =
     !hasStudentProfile ||
@@ -56,6 +75,21 @@ function ScholarshipCard({ scholarship, student }) {
 
   const status = getStatus();
 
+
+  /* =========================
+     SAVE SCHOLARSHIP
+  ========================= */
+
+  const handleSave = () => {
+    toggleSavedItem(
+      scholarship,
+      "scholarship"
+    );
+
+    setSaved((previous) => !previous);
+  };
+
+
   return (
     <>
       <article className="scholarship-card">
@@ -73,6 +107,24 @@ function ScholarshipCard({ scholarship, student }) {
           >
             {status.icon} {status.text}
           </span>
+
+
+          {/* SAVE BUTTON */}
+
+          <button
+            type="button"
+            className={`save-item-btn ${
+              saved ? "saved" : ""
+            }`}
+            onClick={handleSave}
+            aria-label={
+              saved
+                ? "Remove scholarship from saved items"
+                : "Save scholarship"
+            }
+          >
+            {saved ? "🔖" : "♡"}
+          </button>
 
         </div>
 
@@ -118,7 +170,6 @@ function ScholarshipCard({ scholarship, student }) {
           <div className="scholarship-meta">
 
             <div>
-
               <span>
                 Minimum Marks
               </span>
@@ -126,12 +177,10 @@ function ScholarshipCard({ scholarship, student }) {
               <strong>
                 {scholarship.minMarks}%
               </strong>
-
             </div>
 
 
             <div>
-
               <span>
                 Income Limit
               </span>
@@ -142,15 +191,13 @@ function ScholarshipCard({ scholarship, student }) {
                   "en-IN"
                 )}
               </strong>
-
             </div>
 
           </div>
 
 
-          {/* PERSONALIZED STATUS */}
-
           {hasStudentProfile && (
+
             <div
               className={`eligibility-summary ${
                 isEligible
@@ -183,17 +230,24 @@ function ScholarshipCard({ scholarship, student }) {
               )}
 
             </div>
+
           )}
 
 
-          <button
-            type="button"
-            className="scholarship-details-btn"
-            onClick={() => setShowDetails(true)}
-          >
-            View Details
-            <span>→</span>
-          </button>
+          <div className="scholarship-card-actions">
+
+            <button
+              type="button"
+              className="scholarship-details-btn"
+              onClick={() =>
+                setShowDetails(true)
+              }
+            >
+              View Details
+              <span>→</span>
+            </button>
+
+          </div>
 
         </div>
 
@@ -205,6 +259,7 @@ function ScholarshipCard({ scholarship, student }) {
       ========================= */}
 
       {showDetails && (
+
         <div className="scholarship-modal-overlay">
 
           <div className="scholarship-modal">
@@ -212,7 +267,9 @@ function ScholarshipCard({ scholarship, student }) {
             <button
               type="button"
               className="modal-close"
-              onClick={() => setShowDetails(false)}
+              onClick={() =>
+                setShowDetails(false)
+              }
             >
               ×
             </button>
@@ -242,9 +299,8 @@ function ScholarshipCard({ scholarship, student }) {
               </p>
 
 
-              {/* ELIGIBILITY RESULT */}
-
               {hasStudentProfile && (
+
                 <div
                   className={`modal-status ${
                     isEligible
@@ -259,106 +315,109 @@ function ScholarshipCard({ scholarship, student }) {
                       : "⚠ You may not meet all criteria"}
                   </strong>
 
-                  <span>
-                    Based on your current
-                    student profile.
-                  </span>
-
                 </div>
+
               )}
 
 
-              <div className="modal-highlight">
+              <div className="modal-criteria">
 
                 <div>
-
                   <span>
-                    Scholarship Amount
+                    Minimum Marks
                   </span>
 
                   <strong>
-                    {scholarship.amount}
-                  </strong>
-
-                </div>
-
-
-                <div>
-
-                  <span>
-                    Application Deadline
-                  </span>
-
-                  <strong>
-                    {scholarship.deadline}
-                  </strong>
-
-                </div>
-
-              </div>
-
-
-              <h3>
-                Eligibility Criteria
-              </h3>
-
-
-              <ul className="eligibility-list">
-
-                <li>
-                  {marksEligible ? "✓" : "✕"}{" "}
-                  Minimum marks:{" "}
-                  <strong>
+                    {marksEligible
+                      ? "✓ "
+                      : "✕ "}
                     {scholarship.minMarks}%
                   </strong>
-                </li>
+                </div>
 
 
-                <li>
-                  {incomeEligible ? "✓" : "✕"}{" "}
-                  Maximum family income:{" "}
+                <div>
+                  <span>
+                    Maximum Family Income
+                  </span>
+
                   <strong>
+                    {incomeEligible
+                      ? "✓ "
+                      : "✕ "}
                     ₹
                     {scholarship.maxIncome.toLocaleString(
                       "en-IN"
                     )}
                   </strong>
-                </li>
+                </div>
 
 
-                <li>
-                  {classEligible ? "✓" : "✕"}{" "}
-                  Eligible class:{" "}
+                <div>
+                  <span>
+                    Education Level
+                  </span>
+
                   <strong>
-                    {scholarship.eligibleClasses.join(
-                      ", "
-                    )}
+                    {classEligible
+                      ? "✓ Eligible"
+                      : "✕ Not Eligible"}
                   </strong>
-                </li>
+                </div>
 
 
-                <li>
-                  {categoryEligible ? "✓" : "✕"}{" "}
-                  Category:{" "}
+                <div>
+                  <span>
+                    Category
+                  </span>
+
                   <strong>
-                    {scholarship.category}
+                    {categoryEligible
+                      ? "✓ Eligible"
+                      : "✕ Not Eligible"}
                   </strong>
-                </li>
+                </div>
 
-              </ul>
+              </div>
 
 
-              <div className="demo-notice">
-                ℹ️ This scholarship information is
-                currently part of the ScholarMatch
-                demonstration dataset.
+              <div className="modal-amount">
+
+                <span>
+                  Scholarship Amount
+                </span>
+
+                <strong>
+                  {scholarship.amount}
+                </strong>
+
+              </div>
+
+
+              <div className="scholarship-demo-notice">
+                ℹ️ This scholarship is part of
+                the ScholarMatch demonstration
+                dataset.
               </div>
 
 
               <button
                 type="button"
-                className="modal-action-btn"
-                onClick={() => setShowDetails(false)}
+                className="scholarship-modal-save"
+                onClick={handleSave}
+              >
+                {saved
+                  ? "🔖 Remove from Saved"
+                  : "♡ Save Scholarship"}
+              </button>
+
+
+              <button
+                type="button"
+                className="modal-close-btn"
+                onClick={() =>
+                  setShowDetails(false)
+                }
               >
                 Close
               </button>
@@ -368,6 +427,7 @@ function ScholarshipCard({ scholarship, student }) {
           </div>
 
         </div>
+
       )}
 
     </>

@@ -64,6 +64,14 @@ function StudentDashboard({
           </Link>
 
           <Link
+  to="/saved"
+  className="sidebar-link"
+>
+  <span>🔖</span>
+  Saved Items
+</Link>
+
+          <Link
             to="/profile"
             className="sidebar-link"
           >
@@ -586,6 +594,30 @@ function StudentDashboard({
               </b>
 
             </Link>
+
+            <Link to="/saved">
+
+  <div className="quick-icon purple">
+    🔖
+  </div>
+
+  <div>
+
+    <strong>
+      Saved Items
+    </strong>
+
+    <span>
+      View saved scholarships & opportunities
+    </span>
+
+  </div>
+
+  <b>
+    →
+  </b>
+
+</Link>
 
           </div>
 
